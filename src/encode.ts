@@ -1,1 +1,3 @@
-export const encode = () => {};
+export const encode = () => {
+  return {};
+};
