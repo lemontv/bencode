@@ -1,0 +1,19 @@
+{
+  "name": "@lemontv/bencode",
+  "version": "0.0.0",
+  "description": "BitTorrent bencode format encode/decode parser",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc -p .",
+    "start": "npm run build -- -w",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "bencode"
+  ],
+  "author": "lemontv",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^3.6.3"
+  }
+}
