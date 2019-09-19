@@ -1,8 +1,88 @@
-import { encode } from "./encode";
+import { Buffer } from "buffer";
+import {
+    decode,
+    isInteger,
+    parseDict,
+    parseInteger,
+    parseList,
+} from "./decode";
 
-describe("encode()", () => {
-  test("should return object", () => {
-    const obj = encode();
-    expect(obj).toEqual({});
-  });
+describe("parseInteger()", () => {
+    const buffer = Buffer.from("i1024e");
+
+    it("should be able to parse an integer", () => {
+        expect(parseInteger(buffer, 1)).toEqual([1024, 5]);
+    });
+});
+
+describe("isInteger()", () => {
+    const buffer = Buffer.from("0123456789xyz");
+
+    it("should be truthy for number", () => {
+        for (let i = 0; i < 10; i++) {
+            const char = buffer[i];
+            expect(isInteger(char)).toBeTruthy();
+        }
+    });
+
+    it("should be falsy for char", () => {
+        for (let i = 10; i < 13; i++) {
+            const char = buffer[i];
+            expect(isInteger(char)).toBeFalsy();
+        }
+    });
+});
+
+describe("parseList()", () => {
+    it("should return number array ", () => {
+        const buffer = Buffer.from("li42ei32ee");
+        expect(parseList(buffer, 1)).toEqual([[42, 32], 9]);
+    });
+
+    it("should return string array ", () => {
+        const buffer = Buffer.from("l4:abcde");
+        expect(parseList(buffer, 1)).toEqual([["abcd"], buffer.length - 1]);
+    });
+
+    it("should return string & number array ", () => {
+        const buffer = Buffer.from("l4:abcdi444ee");
+        expect(parseList(buffer, 1)).toEqual([
+            ["abcd", 444],
+            buffer.length - 1,
+        ]);
+    });
+
+    it("should return Darray ", () => {
+        const buffer = Buffer.from(
+            "l4:abcdli3eei444ed3:bar4:spam3:fooi42e4:listli42eeee",
+        );
+        expect(parseList(buffer, 1)).toEqual([
+            ["abcd", [3], 444, { bar: "spam", foo: 42, list: [42] }],
+            buffer.length - 1,
+        ]);
+    });
+});
+
+describe("parseDict()", () => {
+    it("should return Object", () => {
+        const buffer = Buffer.from("d3:bar4:spam3:fooi42e4:listli42eee");
+        expect(parseDict(buffer, 1)).toEqual([
+            { bar: "spam", foo: 42, list: [42] },
+            buffer.length - 1,
+        ]);
+    });
+});
+
+describe("decode()", () => {
+    it("should return Object", () => {
+        const buffer = Buffer.from(
+            "l4:abcdli3eei444ed3:bar4:spam3:fooi42e4:listli42eeee",
+        );
+        expect(decode(buffer)).toEqual([
+            "abcd",
+            [3],
+            444,
+            { bar: "spam", foo: 42, list: [42] },
+        ]);
+    });
 });
