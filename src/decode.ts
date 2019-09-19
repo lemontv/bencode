@@ -1,4 +1,4 @@
-import { DArray, Dict, IDecode, IParser } from "../";
+import { DArray, Dict, IDecode, IParser } from "..";
 
 const END = 0x65;
 const NumberStart = 0x30;

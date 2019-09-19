@@ -5,7 +5,7 @@ import {
     parseDict,
     parseInteger,
     parseList,
-} from "./decode";
+} from "../src/decode";
 
 describe("parseInteger()", () => {
     const buffer = Buffer.from("i1024e");
