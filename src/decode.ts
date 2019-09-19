@@ -28,7 +28,7 @@ export const decode: IDecode = (buffer) => {
 
     // Start with 'd', parse dict
     if (buffer[position] === DictIdentify) {
-        [data, position] = parseList(buffer, position + 1);
+        [data, position] = parseDict(buffer, position + 1);
     }
 
     return data;

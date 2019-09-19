@@ -21,7 +21,7 @@ export const encodeInteger = (num: number): string => {
 };
 
 export const encodeString = (str: string): string => {
-    return `${str.length}:${str}e`;
+    return `${str.length}:${str}`;
 };
 
 export const encodeList = (list: Decode[]): string => {
@@ -49,18 +49,18 @@ export const encodeDict = (dict: Dict): string => {
         const val = dict[key];
 
         if (typeof val === "string") {
-            return acc + `${encodeString(key)}:${encodeString(val)}`;
+            return acc + `${encodeString(key)}${encodeString(val)}`;
         }
 
         if (typeof val === "number") {
-            return acc + `${encodeString(key)}:${encodeInteger(val)}`;
+            return acc + `${encodeString(key)}${encodeInteger(val)}`;
         }
 
         if (Array.isArray(val)) {
-            return acc + `${encodeString(key)}:${encodeList(val)}`;
+            return acc + `${encodeString(key)}${encodeList(val)}`;
         }
 
-        return acc + `${encodeString(key)}:${encodeDict(val)}`;
+        return acc + `${encodeString(key)}${encodeDict(val)}`;
     }, "");
 
     return `d${str}e`;
