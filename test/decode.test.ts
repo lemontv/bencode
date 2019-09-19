@@ -5,7 +5,7 @@ import {
     parseDict,
     parseInteger,
     parseList,
-} from "./decode";
+} from "../src/decode";
 
 describe("parseInteger()", () => {
     const buffer = Buffer.from("i1024e");
@@ -74,7 +74,7 @@ describe("parseDict()", () => {
 });
 
 describe("decode()", () => {
-    it("should return Object", () => {
+    it("should return List", () => {
         const buffer = Buffer.from(
             "l4:abcdli3eei444ed3:bar4:spam3:fooi42e4:listli42eeee",
         );

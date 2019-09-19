@@ -1,4 +1,4 @@
-import { DArray, Dict, IDecode, IParser } from "../";
+import { DArray, Dict, IDecode, IParser } from "..";
 
 const END = 0x65;
 const NumberStart = 0x30;
@@ -28,7 +28,7 @@ export const decode: IDecode = (buffer) => {
 
     // Start with 'd', parse dict
     if (buffer[position] === DictIdentify) {
-        [data, position] = parseList(buffer, position + 1);
+        [data, position] = parseDict(buffer, position + 1);
     }
 
     return data;
