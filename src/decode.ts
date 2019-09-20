@@ -1,4 +1,4 @@
-import { DArray, Dict, IDecode, IParser } from "..";
+import { DArray, Decode, Dict, IDecode, IParser } from "..";
 
 const END = 0x65;
 const NumberStart = 0x30;
@@ -8,30 +8,33 @@ const NumberIdentify = 0x69;
 const ListIdentify = 0x6c;
 
 export const decode: IDecode = (buffer) => {
-    let position = 0;
-    let data;
+    const [data, position] = parse(buffer, 0);
 
+    return data;
+};
+
+export const parse: IParser<Decode> = (buffer, position) => {
     // Start with 'i', parse number
     if (buffer[position] === NumberIdentify) {
-        [data, position] = parseInteger(buffer, position + 1);
+        return parseInteger(buffer, position + 1);
     }
 
     // Start with number, parse string
     if (isInteger(buffer[position])) {
-        [data, position] = parseString(buffer, position + 1);
+        return parseString(buffer, position);
     }
 
     // Start with 'l', parse array
     if (buffer[position] === ListIdentify) {
-        [data, position] = parseList(buffer, position + 1);
+        return parseList(buffer, position + 1);
     }
 
     // Start with 'd', parse dict
     if (buffer[position] === DictIdentify) {
-        [data, position] = parseDict(buffer, position + 1);
+        return parseDict(buffer, position + 1);
     }
 
-    return data;
+    throw new Error("Type error");
 };
 
 export const isInteger = (char: number) => {
@@ -54,47 +57,18 @@ export const parseString: IParser<string> = (buffer, position) => {
     [num, position] = parseInteger(buffer, position);
     position++;
     const chars = buffer.slice(position, position + num).toString();
-    return [chars, position + num];
+    return [chars, position + num - 1];
 };
 
 export const parseList: IParser<DArray> = (buffer, position) => {
     const list: DArray = [];
+
     while (buffer[position] !== END && buffer.length > position) {
-        let num = 0;
-
-        // Start with 'i', parse number
-        if (buffer[position] === NumberIdentify) {
-            [num, position] = parseInteger(buffer, position + 1);
-            list.push(num);
-            position++;
-            continue;
-        }
-
-        // Start with number, parse string
-        if (isInteger(buffer[position])) {
-            let chars = "";
-            [chars, position] = parseString(buffer, position);
-            list.push(chars);
-            continue;
-        }
-
-        // Start with 'l', parse array
-        if (buffer[position] === ListIdentify) {
-            let subList = [];
-            [subList, position] = parseList(buffer, position + 1);
-            list.push(subList);
-            position++;
-            continue;
-        }
-
-        // Start with 'd', parse dict
-        if (buffer[position] === DictIdentify) {
-            let subDict = {};
-            [subDict, position] = parseDict(buffer, position + 1);
-            list.push(subDict);
-            position++;
-            continue;
-        }
+        let data: Decode;
+        [data, position] = parse(buffer, position);
+        list.push(data);
+        position++;
+        continue;
     }
 
     return [list, position];
@@ -104,42 +78,15 @@ export const parseDict: IParser<Dict> = (buffer, position) => {
     const dict: Dict = {};
     while (buffer[position] !== END && buffer.length > position) {
         let key = "";
+        let data: Decode;
+
         [key, position] = parseString(buffer, position);
+        position++;
 
-        // Start with 'i', parse number
-        if (buffer[position] === NumberIdentify) {
-            let num = 0;
-            [num, position] = parseInteger(buffer, position + 1);
-            position++;
-            dict[key] = num;
-            continue;
-        }
-
-        // Start with number, parse string
-        if (isInteger(buffer[position])) {
-            let chars = "";
-            [chars, position] = parseString(buffer, position);
-            dict[key] = chars;
-            continue;
-        }
-
-        // Start with 'l', parse list
-        if (buffer[position] === ListIdentify) {
-            let subList = [];
-            [subList, position] = parseList(buffer, position + 1);
-            dict[key] = subList;
-            position++;
-            continue;
-        }
-
-        // Start with 'd', parse dict
-        if (buffer[position] === DictIdentify) {
-            let subDict = {};
-            [subDict, position] = parseDict(buffer, position + 1);
-            dict[key] = subDict;
-            position++;
-            continue;
-        }
+        [data, position] = parse(buffer, position);
+        dict[key] = data;
+        position++;
+        continue;
     }
     return [dict, position];
 };
