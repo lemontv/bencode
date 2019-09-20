@@ -6,6 +6,18 @@ import {
     parseInteger,
     parseList,
 } from "../src/decode";
+import {
+    announcePeersQuery,
+    announcePeersResponse,
+    error,
+    findNodeQuery,
+    findNodeResponse,
+    getPeersClosetNodeResponse,
+    getPeersQuery,
+    getPeersResponse,
+    pingQuery,
+    pingResponse,
+} from "./data";
 
 describe("parseInteger()", () => {
     const buffer = Buffer.from("i1024e");
@@ -74,15 +86,47 @@ describe("parseDict()", () => {
 });
 
 describe("decode()", () => {
-    it("should return List", () => {
-        const buffer = Buffer.from(
-            "l4:abcdli3eei444ed3:bar4:spam3:fooi42e4:listli42eeee",
+    it("should decode KRPC error message", () => {
+        const buffer = Buffer.from(error.bencoded);
+        expect(decode(buffer)).toEqual(error.raw);
+    });
+
+    it("should decode KRPC ping message", () => {
+        const queryBuffer = Buffer.from(pingQuery.bencoded);
+        expect(decode(queryBuffer)).toEqual(pingQuery.raw);
+
+        const responseBuffer = Buffer.from(pingResponse.bencoded);
+        expect(decode(responseBuffer)).toEqual(pingResponse.raw);
+    });
+
+    it("should decode KRPC find_node message", () => {
+        const queryBuffer = Buffer.from(findNodeQuery.bencoded);
+        expect(decode(queryBuffer)).toEqual(findNodeQuery.raw);
+
+        const responseBuffer = Buffer.from(findNodeResponse.bencoded);
+        expect(decode(responseBuffer)).toEqual(findNodeResponse.raw);
+    });
+
+    it("should decode KRPC get_peers message", () => {
+        const queryBuffer = Buffer.from(getPeersQuery.bencoded);
+        expect(decode(queryBuffer)).toEqual(getPeersQuery.raw);
+
+        const responseBuffer = Buffer.from(getPeersResponse.bencoded);
+        expect(decode(responseBuffer)).toEqual(getPeersResponse.raw);
+
+        const responseClosetNodesBuffer = Buffer.from(
+            getPeersClosetNodeResponse.bencoded,
         );
-        expect(decode(buffer)).toEqual([
-            "abcd",
-            [3],
-            444,
-            { bar: "spam", foo: 42, list: [42] },
-        ]);
+        expect(decode(responseClosetNodesBuffer)).toEqual(
+            getPeersClosetNodeResponse.raw,
+        );
+    });
+
+    it("should decode KRPC announce_peers message", () => {
+        const queryBuffer = Buffer.from(announcePeersQuery.bencoded);
+        expect(decode(queryBuffer)).toEqual(announcePeersQuery.raw);
+
+        const responseBuffer = Buffer.from(announcePeersResponse.bencoded);
+        expect(decode(responseBuffer)).toEqual(announcePeersResponse.raw);
     });
 });
