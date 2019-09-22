@@ -1,14 +1,15 @@
-import { DArray, Decode, Dict, IDecode, IParser } from "..";
+import { DArray, Decode, Dict, IDecode, IParser } from "./types";
 
 const END = 0x65;
 const NumberStart = 0x30;
 const NumberEnd = 0x39;
 const DictIdentify = 0x64;
 const NumberIdentify = 0x69;
+const NagetiveIdentify = 0x2d;
 const ListIdentify = 0x6c;
 
-export const decode: IDecode = (buffer) => {
-    const [data, position] = parse(buffer, 0);
+export const decode: IDecode = (buffer, position = 0) => {
+    const [data] = parse(buffer, position);
 
     return data;
 };
@@ -34,7 +35,7 @@ export const parse: IParser<Decode> = (buffer, position) => {
         return parseDict(buffer, position + 1);
     }
 
-    throw new Error("Type error");
+    throw new Error("No a validate data!");
 };
 
 export const isInteger = (char: number) => {
@@ -43,13 +44,19 @@ export const isInteger = (char: number) => {
 
 export const parseInteger: IParser<number> = (buffer, position) => {
     let num = 0;
+    let flag = 1;
+
+    if (buffer[position] === NagetiveIdentify) {
+        flag = -1;
+        position++;
+    }
 
     while (isInteger(buffer[position]) && buffer.length > position) {
         num = num * 10 + (buffer[position] - 0x30);
         position++;
     }
 
-    return [num, position];
+    return [num * flag, position];
 };
 
 export const parseString: IParser<string> = (buffer, position) => {

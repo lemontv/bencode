@@ -1,11 +1,6 @@
-export type IDecode = (buffer: Buffer) => Decode | undefined;
+import { IDecode, Decode } from "./src/types";
 
-export type IParser<T> = (b: Buffer, p: number) => [T, number];
-
-export interface Dict {
-    [key: string]: Decode;
+declare module "@lemontv/bencode" {
+    export function encode(payload: Decode): string;
+    export function decode(): IDecode;
 }
-
-export interface DArray extends Array<Decode> {}
-
-export type Decode = number | string | DArray | Dict;

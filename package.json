@@ -2,9 +2,11 @@
   "name": "@lemontv/bencode",
   "version": "0.0.0",
   "description": "BitTorrent bencode format encode/decode parser",
-  "main": "dist/main.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "npm run lint && npm test && npm run compile",
+    "clean": "rm -rf ./dist",
+    "build": "npm run lint && npm test && npm run clean && npm run compile",
     "start": "npm run build -- -w",
     "test": "jest",
     "test:watch": "jest --watch",
