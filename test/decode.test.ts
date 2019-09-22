@@ -20,10 +20,14 @@ import {
 } from "./data";
 
 describe("parseInteger()", () => {
-    const buffer = Buffer.from("i1024e");
-
     it("should be able to parse an integer", () => {
+        const buffer = Buffer.from("i1024e");
         expect(parseInteger(buffer, 1)).toEqual([1024, 5]);
+    });
+
+    it("should be able to parse an negative integer", () => {
+        const buffer = Buffer.from("i-1024e");
+        expect(parseInteger(buffer, 1)).toEqual([-1024, buffer.length - 1]);
     });
 });
 
@@ -86,12 +90,12 @@ describe("parseDict()", () => {
 });
 
 describe("decode()", () => {
-    it("should decode KRPC error message", () => {
+    it("should be able to decode KRPC error message", () => {
         const buffer = Buffer.from(error.bencoded);
         expect(decode(buffer)).toEqual(error.raw);
     });
 
-    it("should decode KRPC ping message", () => {
+    it("should be able to decode KRPC ping message", () => {
         const queryBuffer = Buffer.from(pingQuery.bencoded);
         expect(decode(queryBuffer)).toEqual(pingQuery.raw);
 
@@ -99,7 +103,7 @@ describe("decode()", () => {
         expect(decode(responseBuffer)).toEqual(pingResponse.raw);
     });
 
-    it("should decode KRPC find_node message", () => {
+    it("should be able to decode KRPC find_node message", () => {
         const queryBuffer = Buffer.from(findNodeQuery.bencoded);
         expect(decode(queryBuffer)).toEqual(findNodeQuery.raw);
 
@@ -107,7 +111,7 @@ describe("decode()", () => {
         expect(decode(responseBuffer)).toEqual(findNodeResponse.raw);
     });
 
-    it("should decode KRPC get_peers message", () => {
+    it("should be able to decode KRPC get_peers message", () => {
         const queryBuffer = Buffer.from(getPeersQuery.bencoded);
         expect(decode(queryBuffer)).toEqual(getPeersQuery.raw);
 
@@ -122,7 +126,7 @@ describe("decode()", () => {
         );
     });
 
-    it("should decode KRPC announce_peers message", () => {
+    it("should be able to decode KRPC announce_peers message", () => {
         const queryBuffer = Buffer.from(announcePeersQuery.bencoded);
         expect(decode(queryBuffer)).toEqual(announcePeersQuery.raw);
 

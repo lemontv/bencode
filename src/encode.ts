@@ -1,4 +1,4 @@
-import { Decode, Dict } from "..";
+import { Decode, Dict } from "./types";
 
 export const encode = (payload: Decode): string => {
     if (typeof payload === "string") {
@@ -13,7 +13,11 @@ export const encode = (payload: Decode): string => {
         return encodeList(payload);
     }
 
-    return encodeDict(payload);
+    if (typeof payload === "object") {
+        return encodeDict(payload);
+    }
+
+    throw new Error("No a validate data!");
 };
 
 export const encodeInteger = (num: number): string => {
@@ -26,42 +30,19 @@ export const encodeString = (str: string): string => {
 
 export const encodeList = (list: Decode[]): string => {
     const str = list.reduce((acc, val) => {
-        if (typeof val === "string") {
-            return acc + encodeString(val);
-        }
-
-        if (typeof val === "number") {
-            return acc + encodeInteger(val);
-        }
-
-        if (Array.isArray(val)) {
-            return acc + encodeList(val);
-        }
-
-        return acc + encodeDict(val);
+        return acc + encode(val);
     }, "");
 
     return `l${str}e`;
 };
 
 export const encodeDict = (dict: Dict): string => {
-    const str = Object.keys(dict).reduce((acc, key) => {
-        const val = dict[key];
-
-        if (typeof val === "string") {
-            return acc + `${encodeString(key)}${encodeString(val)}`;
-        }
-
-        if (typeof val === "number") {
-            return acc + `${encodeString(key)}${encodeInteger(val)}`;
-        }
-
-        if (Array.isArray(val)) {
-            return acc + `${encodeString(key)}${encodeList(val)}`;
-        }
-
-        return acc + `${encodeString(key)}${encodeDict(val)}`;
-    }, "");
+    const str = Object.keys(dict)
+        .sort()
+        .reduce((acc, key) => {
+            const val = dict[key];
+            return acc + `${encodeString(key)}${encode(val)}`;
+        }, "");
 
     return `d${str}e`;
 };
