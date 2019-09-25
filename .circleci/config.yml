@@ -9,8 +9,11 @@ jobs:
           name: Install dependencies
           command: npm ci
       - run:
-          name: Running tests & Collect coverage
+          name: Running tests
           command: npm run test
+      - run:
+          name: Collect coverage
+          command: npm run coverage
       - store_artifacts:
           path: coverage
       - run:
