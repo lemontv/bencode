@@ -6,9 +6,9 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "clean": "rm -rf ./dist",
-    "build": "npm run lint && npm test && npm run clean && npm run compile",
+    "build": "npm run clean && npm run compile",
     "start": "npm run build -- -w",
-    "test": "jest",
+    "test": "npm run lint && jest",
     "test:watch": "jest --watch",
     "lint": "tslint src/**/*.ts",
     "compile": "tsc -p ./"

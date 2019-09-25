@@ -6,17 +6,22 @@ jobs:
     steps:
       - checkout
       - run:
-          name: update-npm
+          name: Update npm
           command: "sudo npm install -g npm@latest"
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
-          name: install-dependencies
+          name: Install dependencies
           command: npm ci
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - ./node_modules
       - run:
-          name: build
+          name: Running tests
+          command: npm run test
+      - store_test_results:
+          path: test-results
+      - run:
+          name: Build
           command: npm run build
