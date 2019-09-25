@@ -22,6 +22,8 @@ jobs:
     docker:
       - image: circleci/node:lts
     steps:
+      - attach_workspace:
+          at: ~/project
       - run:
           name: Authenticate with registry
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
