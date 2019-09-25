@@ -2,11 +2,10 @@ version: 2.1
 
 jobs:
   build:
+    working_directory: ~/repo
     docker:
       - image: circleci/node:lts
     steps:
-      - attach_workspace:
-          at: ~/repo
       - checkout
       - run:
           name: Install dependencies
@@ -20,7 +19,12 @@ jobs:
       - run:
           name: Build
           command: npm run build
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - .
   deploy:
+    working_directory: ~/repo
     docker:
       - image: circleci/node:lts
     steps:
