@@ -17,14 +17,12 @@ jobs:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - ./node_modules
-      - store_artifacts:
-          path: /test-results
-          destination: tests
       - run:
           name: Running tests
           command: npm run test
-      - store_test_results:
-          path: test-results
+      - store_artifacts:
+          path: /coverage
+          destination: coverage
       - run:
           name: Build
           command: npm run build
