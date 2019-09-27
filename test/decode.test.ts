@@ -133,4 +133,9 @@ describe("decode()", () => {
         const responseBuffer = Buffer.from(announcePeersResponse.bencoded);
         expect(decode(responseBuffer)).toEqual(announcePeersResponse.raw);
     });
+
+    it("should throw an error", () => {
+        const queryBuffer = Buffer.from("xyz");
+        expect(() => decode(queryBuffer)).toThrow();
+    });
 });
