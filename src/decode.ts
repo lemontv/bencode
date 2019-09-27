@@ -8,8 +8,8 @@ const NumberIdentify = 0x69;
 const NagetiveIdentify = 0x2d;
 const ListIdentify = 0x6c;
 
-export const decode: IDecode = (buffer, position = 0) => {
-    const [data] = parse(buffer, position);
+export const decode: IDecode = (buffer) => {
+    const [data] = parse(buffer, 0);
 
     return data;
 };
