@@ -1,7 +1,7 @@
 version: 2
 
 jobs:
-  build:
+  test:
     working_directory: ~/repo
     docker:
       - image: circleci/node:lts
@@ -16,6 +16,18 @@ jobs:
       - run:
           name: Collect coverage
           command: npm run coverage
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - .
+  build:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:lts
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - checkout
       - run:
           name: Build
           command: npm run build
@@ -41,12 +53,23 @@ workflows:
   version: 2
   npm-publish:
     jobs:
-      - build
+      - test:
+          filters:
+            tags:
+              only: /^v.*/
+      - build:
+          requires:
+            - test
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              only: "master"
       - deploy:
           requires:
             - build
           filters:
-            branches:
-              ignore: /.*/
             tags:
               only: /^v.*/
+            branches:
+              ignore: /.*/
