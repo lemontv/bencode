@@ -17,6 +17,7 @@ import {
     pingQuery,
     pingResponse,
 } from "./data";
+import { Decode } from "../src/types";
 
 describe("encode()", () => {
     it("should be able to encode KRPC error message", () => {
@@ -48,6 +49,11 @@ describe("encode()", () => {
         expect(encode(announcePeersResponse.raw)).toEqual(
             announcePeersResponse.bencoded,
         );
+    });
+
+    it("should throw an error", () => {
+        // @ts-ignore
+        expect(() => encode(undefined)).toThrow();
     });
 });
 
