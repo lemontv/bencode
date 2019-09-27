@@ -1,7 +1,7 @@
 {
   "name": "@lemontv/bencode",
   "version": "0.0.12",
-  "description": "BitTorrent bencode format encode/decode parser",
+  "description": "BitTorrent bencode encode/decode",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -15,9 +15,16 @@
     "coverage": "jest --coverage --coverageReporters=text-lcov | coveralls"
   },
   "keywords": [
-    "bencode"
+    "Bencode",
+    "BitTorrent",
+    "Typescript",
+    "DHT"
   ],
-  "author": "lemontv",
+  "author": {
+    "name": "lemontv",
+    "email": "chen@lemontv.me",
+    "url": "https://lemontv.me/"
+  },
   "license": "ISC",
   "devDependencies": {
     "@types/jest": "^24.0.18",

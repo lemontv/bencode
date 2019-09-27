@@ -7,3 +7,22 @@
 ![License](https://img.shields.io/npm/l/@lemontv/bencode)
 ![Version](https://img.shields.io/npm/v/@lemontv/bencode)
 
+## Description
+BitTorrent DHT KRPC protocol bencode ([BEP 005](https://www.bittorrent.org/beps/bep_0005.html)) utils function write in typescript.
+
+## Installation
+### NPM:
+
+```
+$ npm install @lemontv/bencode
+```
+
+## Usage
+
+```
+import { encode, decode} from '@lemontv/bencode';
+
+const request = encode({"t":"aa", "y":"q", "q":"ping", "a":{"id":"abcdefghij0123456789"}});
+
+const response = decode(Buffer.from("d1:ad2:id20:abcdefghij0123456789e1:q4:ping1:t2:aa1:y1:qe"));
+```
