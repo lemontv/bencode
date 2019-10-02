@@ -11,16 +11,16 @@
 BitTorrent DHT KRPC protocol bencode ([BEP 005](https://www.bittorrent.org/beps/bep_0005.html)) utils function write in typescript.
 
 ## Installation
-### NPM:
+### NPM
 
-```
+```bash
 $ npm install @lemontv/bencode
 ```
 
 ## Usage
 
-```
-import { encode, decode} from '@lemontv/bencode';
+```javascript
+import { encode, decode } from '@lemontv/bencode';
 
 const request = encode({"t":"aa", "y":"q", "q":"ping", "a":{"id":"abcdefghij0123456789"}});
 
