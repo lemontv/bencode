@@ -6,12 +6,12 @@
 ![Dependences](https://img.shields.io/david/lemontv/bencode)
 ![License](https://img.shields.io/npm/l/@lemontv/bencode)
 ![Version](https://img.shields.io/npm/v/@lemontv/bencode)
+[![Codacy Badge](https://img.shields.io/codacy/grade/c4abff05fc5042f698db0c53412a359a)](https://www.codacy.com/manual/lemontv/bencode)
 
 ## Description
 BitTorrent DHT KRPC protocol bencode ([BEP 005](https://www.bittorrent.org/beps/bep_0005.html)) utils function write in typescript.
 
 ## Installation
-### NPM
 
 ```bash
 $ npm install @lemontv/bencode
