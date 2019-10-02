@@ -1,6 +1,6 @@
 {
   "name": "@lemontv/bencode",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "BitTorrent bencode encode/decode",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
